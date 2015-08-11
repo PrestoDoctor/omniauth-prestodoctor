@@ -72,3 +72,12 @@ You will need to set up a callback path that we can call with the generated toke
 You can see an example of this here: https://github.com/PrestoDoctor/prestodoctor-oauth
 
 (look at `app/controllers/users/omniauth/callbacks_controller.rb` and it's related entry in `routes.rb`)
+
+# Accessible data
+
+Take a look at this screenshot for a sample of data that you can retrieve:
+
+<img src="https://raw.githubusercontent.com/PrestoDoctor/prestodoctor-oauth/master/screenshot.png" width="700">
+
+- `user_info` scope data is inside of the `info` hash
+- `recommendation` and `photo_id` are contained inside of the `extra` hash
