@@ -9,7 +9,7 @@ For more details, read the [PrestoDoctor API Reference](https://prestodoctor.com
 Add to your Gemfile:
 
 ```ruby
-gem "omniauth-prestodoctor"
+gem 'omniauth-prestodoctor'
 ```
 
 then bundle install
