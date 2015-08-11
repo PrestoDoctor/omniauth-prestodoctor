@@ -4,6 +4,11 @@ module OmniAuth
   module Strategies
     class PrestoDoctor < OmniAuth::Strategies::OAuth2
       BASE_USER_API = '/api/v1/user'
+      SCOPES = {
+          USER_INFO: 'user_info',
+          RECOMMENDATION: 'recommendation',
+          PHOTO_ID: 'photo_id'
+      }
 
       option :name, :prestodoctor
 
@@ -19,22 +24,30 @@ module OmniAuth
       end
 
       extra do
-        hash = {}
-        hash[:recommendation] = recommendation if recommendation.present?
-        hash[:photo_id] = photo_id if photo_id.present?
-        hash
+        {
+            recommendation: recommendation,
+            photo_id: photo_id
+        }
       end
 
       def raw_info
-        @raw_info ||= access_token.get(BASE_USER_API).parsed
+        @raw_info ||= has_scope?(SCOPES[:USER_INFO]) ? access_token.get(BASE_USER_API).parsed : nil
       end
 
       def recommendation
-        @raw_rec ||= access_token.get(BASE_USER_API + '/recommendation').parsed
+        @raw_rec ||= has_scope?(SCOPES[:RECOMMENDATION]) ? access_token.get(BASE_USER_API + '/recommendation').parsed : nil
       end
 
       def photo_id
-        @raw_photo_id ||= access_token.get(BASE_USER_API + '/photo_id').parsed
+        @raw_photo_id ||= has_scope?(SCOPES[:PHOTO_ID]) ? access_token.get(BASE_USER_API + '/photo_id').parsed : nil
+      end
+
+      private
+
+      def has_scope?(scope_name)
+        return false unless access_token.params['scope']
+        scopes = access_token.params['scope'].split(' ')
+        scopes.include? scope_name
       end
     end
   end
